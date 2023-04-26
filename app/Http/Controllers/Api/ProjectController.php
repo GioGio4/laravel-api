@@ -17,7 +17,7 @@ class ProjectController extends Controller
     {
         $projects = Project::orderBy('updated_at', 'DESC')
             ->with('type', 'technologies')
-            ->get();
+            ->paginate(9);
 
         return response()->json($projects);
     }
@@ -41,7 +41,9 @@ class ProjectController extends Controller
      */
     public function show($id)
     {
-        //
+        $project = Project::where('id', $id)->with('type', 'technologies')->first();
+        if (!$project) return response(null, 404);
+        return response()->json($project);
     }
 
     /**
